@@ -5,20 +5,11 @@
 #include <locale.h>
 using namespace std;
 
-/* instruções
-U = 1;
-J = 2;
-I = 3;
-B = 4;
-S = 5;
-R = 6;
- */
-
 struct Organizacao
 {
     string nome;
-    int numeroDeCiclos = 0;
-    int numeroDeInstrucoes = 0;
+    float numeroDeCiclos = 0;
+    float numeroDeInstrucoes = 0;
     float frequenciaDeClock;
     float tempoExec;
 };
@@ -33,11 +24,14 @@ char definirTipoDaInstrucao(string linha)
     if (ultimos7Numeros == "1101111")
         return 'J';
 
-    if (ultimos7Numeros == "1100111" || ultimos7Numeros == "0000011" || ultimos7Numeros == "0010011" || ultimos7Numeros == "0001111" || ultimos7Numeros == "1110011")
+    if (ultimos7Numeros == "1100111" || ultimos7Numeros == "0010011" || ultimos7Numeros == "0001111" || ultimos7Numeros == "1110011")
         return 'I';
 
     if (ultimos7Numeros == "1100011")
         return 'B';
+
+    if (ultimos7Numeros == "0000011")
+        return 'L';
 
     if (ultimos7Numeros == "0100011")
         return 'S';
@@ -54,68 +48,78 @@ char definirTipoDaInstrucao(string linha)
 void adicionarNumeroDeCiclosDaOrganizacao(Organizacao &organizacao, char instrucao)
 {
 
-    if (organizacao.nome == "A" || organizacao.nome == "a"){
-    switch (instrucao)
+    if (organizacao.nome == "A" || organizacao.nome == "a")
     {
-    case 'U':
-        organizacao.numeroDeCiclos += 1;
-        break;
+        switch (instrucao)
+        {
+        case 'U':
+            organizacao.numeroDeCiclos += 4;
+            break;
 
-    case 'J':
-        organizacao.numeroDeCiclos += 2;
-        break;
+        case 'J':
+            organizacao.numeroDeCiclos += 3;
+            break;
 
-    case 'I':
-        organizacao.numeroDeCiclos += 3;
-        break;
+        case 'I':
+            organizacao.numeroDeCiclos += 4;
+            break;
 
-    case 'B':
-        organizacao.numeroDeCiclos += 4;
-        break;
+        case 'B':
+            organizacao.numeroDeCiclos += 3;
+            break;
 
-    case 'S':
-        organizacao.numeroDeCiclos += 5;
-        break;
+        case 'L':
+            organizacao.numeroDeCiclos += 5;
+            break;
 
-    case 'R':
-        organizacao.numeroDeCiclos += 6;
-        break;
+        case 'S':
+            organizacao.numeroDeCiclos += 4;
+            break;
 
-    default:
-        break;
+        case 'R':
+            organizacao.numeroDeCiclos += 4;
+            break;
+
+        default:
+            break;
+        }
     }
-    }
 
-        if (organizacao.nome == "B" || organizacao.nome == "b"){
-    switch (instrucao)
+    if (organizacao.nome == "B" || organizacao.nome == "b")
     {
-    case 'U':
-        organizacao.numeroDeCiclos += 2;
-        break;
+        switch (instrucao)
+        {
+        case 'U':
+            organizacao.numeroDeCiclos += 5;
+            break;
 
-    case 'J':
-        organizacao.numeroDeCiclos += 5;
-        break;
+        case 'J':
+            organizacao.numeroDeCiclos += 5;
+            break;
 
-    case 'I':
-        organizacao.numeroDeCiclos += 4;
-        break;
+        case 'I':
+            organizacao.numeroDeCiclos += 5;
+            break;
 
-    case 'B':
-        organizacao.numeroDeCiclos += 6;
-        break;
+        case 'B':
+            organizacao.numeroDeCiclos += 5;
+            break;
 
-    case 'S':
-        organizacao.numeroDeCiclos += 2;
-        break;
+        case 'L':
+            organizacao.numeroDeCiclos += 5;
+            break;
 
-    case 'R':
-        organizacao.numeroDeCiclos += 1;
-        break;
+        case 'S':
+            organizacao.numeroDeCiclos += 5;
+            break;
 
-    default:
-        break;
-    }
+        case 'R':
+            organizacao.numeroDeCiclos += 5;
+            break;
+
+        default:
+            break;
+        }
     }
 }
 
@@ -191,12 +195,14 @@ char calcularDesempenho(Organizacao &organizacaoA, Organizacao &organizacaoB)
 
 float mostrarCPIMedio(Organizacao organizacao)
 {
-    return (organizacao.numeroDeCiclos / organizacao.numeroDeInstrucoes);
+    float cpi = (organizacao.numeroDeCiclos / organizacao.numeroDeInstrucoes);
+
+    return cpi;
 }
 
 float mostrarDesempenho(Organizacao organizacao)
 {
-    return (1 / organizacao.tempoExec);
+    return organizacao.tempoExec;
 }
 
 float mostrarQuaoMaisRapido(Organizacao organizacaoMaisRapida, Organizacao organizacaoMaisLenta)
